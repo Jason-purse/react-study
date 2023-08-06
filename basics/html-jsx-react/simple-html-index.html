@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>with-simple-index</title>
+</head>
+<body>
+<div id="app">
+  <button onclick="btnClick()">查看this</button>
+</div>
+
+<script>
+  function btnClick() {
+
+    // 发现依旧是Window
+    // 说明,普通函数执行 this 就是undefined / window
+    console.log("this: " + this)
+  }
+</script>
+
+
+</body>
+</html>

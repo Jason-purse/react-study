@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>html-js-react-movies-show</title>
+</head>
+<body>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+<!-- Don't use this in production: -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+
+<div id="root"></div>
+<!--需要一个text/babel 脚本块-->
+<script type="text/babel">
+
+    // 函数式组件
+    function MyApp() {
+        let [counts,setCounts] = React.useState(4)
+        let [movies,setMovies] = React.useState(["one", "two", "three", "four"])
+        return (
+            <div>
+                <ul>
+                    {(movies || []).map((e,index) => {
+                        return <li key={index}>第 {index} 个: {e}</li>
+                    })}
+                </ul>
+
+                <button onClick={() => {
+                    setCounts(counts + 1);
+                    setMovies([... movies,counts + 1]);
+                }}>增加新的项目</button>
+            </div>
+        )
+    }
+
+
+    const container = document.getElementById('root');
+
+    // 这在 react 18所引入的新的方式 ..
+    // 先创建一个 根,然后利用虚拟dom render函数 ..
+    const root = ReactDOM.createRoot(container);
+    root.render(<MyApp/>);
+</script>
+<!--
+  Note: this page is a great way to try React but it's not suitable for production.
+  It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+  Read this page for starting a new React project with JSX:
+  https://react.dev/learn/start-a-new-react-project
+
+  Read this page for adding React with JSX to an existing project:
+  https://react.dev/learn/add-react-to-an-existing-project
+-->
+</body>
+</html>

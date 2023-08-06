@@ -1,0 +1,12 @@
+.nav-list {
+    display: flex;
+    justify-content: center;
+}
+.nav-item {
+    padding: 5px 10px;
+    flex: 1;
+}
+
+.active {
+    color: red;
+}

@@ -18,6 +18,10 @@ module.exports = {
                 return {
                     message: "end"
                 }
+            case 'async-begin':
+                return {
+                    message: 'async begin'
+                }
             default: {
                 return state
             }

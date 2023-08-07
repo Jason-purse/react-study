@@ -62,3 +62,79 @@ https://mp.weixin.qq.com/s/hfeCDCcodBCGS5GpedxCGg
  
 ![img_7.png](img_7.png)
 但是我认为，对于简单对象的  拷贝，两者的牺牲是一样的 ... 
+
+
+### 候补丁(monkey patching)
+
+也就是redux中使用的中间件原理 ...
+
+#### 假设我们想要 对派发的action 进行日志记录,应该如何做
+
+1. 那么必然需要通过改写dispatch来实现这样的效果 ...
+
+![img_8.png](img_8.png)
+
+应用
+```js
+// applyMiddleAware(store, logMiddleAware);
+```
+
+但是redux 是怎么做的呢 ..
+函数柯里化,来嵌套 dispatch 函数 ..
+
+```js
+
+export function reduxLogMiddleAware() {
+    return next => {
+        return action => {
+            console.log("dispatch before - redux, action: " + action)
+            next(action)
+            console.log("dispatch after - redux")
+        }
+    }
+}
+
+export function reduxThunkMiddleAware() {
+    return next => {
+
+        // 这里为什么需要将next 函数记录一下 ..
+        // 因为action 执行的函数(有可能继续派发 函数式action),那么如果使用 raw(原始next) 则无法处理 ..
+        // 于是,我们通过 将新的next 记录,让它继续使用新的next 来解析函数式action
+        // 才能够使得流程正确 ...
+        // 这也是为什么 中间件是一个柯里化函数 ..
+        // 因为就是monkey patching ..
+        const raw = next;
+        next = action => {
+            if (action instanceof Function || typeof action === 'function') {
+                console.log("函数 action")
+                action(next)
+            } else {
+                // 执行 ...
+                console.log("普通action")
+                raw(action)
+            }
+        }
+
+        return next;
+    }
+}
+
+
+// 将柯里化中间件 执行重组 dispatch 函数 ...
+export function reduxApplyAware(store, ...func) {
+    let dispatch = store.dispatch;
+
+    func.forEach(e => {
+        store.dispatch = e(dispatch)
+        // 继续交替 ...
+        dispatch = store.dispatch
+    })
+}
+```
+
+应用
+```js
+reduxApplyAware(store,reduxLogMiddleAware(),reduxThunkMiddleAware());
+```
+
+所以其实本质上 redux-thunk的原理很简单 ...

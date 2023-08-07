@@ -1,4 +1,4 @@
-const {BEGIN,STARTING,END} = require('./actionConstriant')
+const {BEGIN, STARTING, END, ASYNC_BEGIN} = require('./actionConstriant')
 module.exports = {
     createStart() {
         return {
@@ -13,6 +13,17 @@ module.exports = {
     createEnd() {
         return {
             type: END
+        }
+    },
+    createAsyncStart() {
+        return (dispatch) => {
+            setTimeout(() => {
+                dispatch(next => {
+                    return next({
+                        type: ASYNC_BEGIN
+                    })
+                })
+            }, 2000)
         }
     }
 }

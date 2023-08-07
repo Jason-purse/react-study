@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import WithRedux from "./hoc/WithRedux";
 import store from './store'
-import {createStart} from './store/actionCreator'
+import {createAsyncStart, createStart} from './store/actionCreator'
 import Use from "./react-redux-comp-use/Use";
 function App({message,dispatch}) {
   return (
@@ -16,6 +16,7 @@ function App({message,dispatch}) {
 
             {/*// 优化成 dispatch 直接传递过来*/}
             <button onClick={() => dispatch(createStart())}>修改Message 为 hello world</button>
+            <button onClick={() => dispatch(createAsyncStart())}>异步修改Message 为 hello world</button>
         </div>
         <hr/>
         <div>

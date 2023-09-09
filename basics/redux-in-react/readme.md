@@ -138,3 +138,34 @@ reduxApplyAware(store,reduxLogMiddleAware(),reduxThunkMiddleAware());
 ```
 
 所以其实本质上 redux-thunk的原理很简单 ...
+
+
+## reducer action 派发次数减少
+
+redux-batched-actions / redux-debounce 都可以将一段时间内的action 只执行一次reducer ..详情参考 库v...
+
+## redux hooks
+
+需要@reduxjs/toolkit
+
+![img_9.png](img_9.png)
+
+### 1. useSelector
+
+ 将store 映射为props
+
+ 它还接受一个新的参数(来决定是否重新渲染组件),
+
+ 一个组件(如果不接受任何props,如果它也没有state),那么如果它使用了useSelector  为什么其他组件更新状态会影响这个组件的重新刷新呢?
+
+ 我们已经排除了(原有的组件更新逻辑),但是由于useSelector 内部订阅了store的更新,那么每次如果store发生数据改变,那么返回的是一个全新的对象 ..
+
+ 那么如何比较来决定是否更新就很重要,那么一般就使用浅比较(shallowEqual),reduxjs-toolkit 也帮我们提供了这个函数 ...
+
+
+ 所以并不是其他原因导致 组件刷新 ..(例如memo高阶组件的使用 - 在我们前面所说的这种示例下,它没有任何帮助,可以查看 react-func-hooks中的render-update 组件了解更新原理)
+ 
+### 2. useDispatcher
+将dispatcher 映射为props
+
+

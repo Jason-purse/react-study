@@ -17,7 +17,7 @@ export default [
                 </>,
                 children: [
                     {
-                        // index 表示默认子路由 ..
+                        // main 表示默认子路由 ..
                         // 如果你在外层加了更多的默认子路由,那么记得设置路由出口 ...
                         index: true, // 设置B为默认子路由
                         path: '',
